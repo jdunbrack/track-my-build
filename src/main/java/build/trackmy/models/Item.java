@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -20,11 +18,13 @@ public abstract class Item {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private ArrayList<String> itemName;
-	private String itemCategory;
 	private ArrayList<String> statBlock;
 	private String requirements;
 	private ArrayList<String> implicitMods;
+	@Lob
 	private ArrayList<String> explicitMods;
+	@Lob
+	private ArrayList<String> craftedMods;
 	private String image;
 	@Column(updatable=false)
 	private Date createdAt;
@@ -39,7 +39,6 @@ public abstract class Item {
 			ArrayList<String> implicitMods, ArrayList<String> explicitMods, String image) {
 		super();
 		this.itemName = itemName;
-		this.itemCategory = itemCategory;
 		this.statBlock = statBlock;
 		this.implicitMods = implicitMods;
 		this.explicitMods = explicitMods;
@@ -60,14 +59,6 @@ public abstract class Item {
 
 	public void setItemName(ArrayList<String> itemName) {
 		this.itemName = itemName;
-	}
-
-	public String getItemCategory() {
-		return itemCategory;
-	}
-
-	public void setItemCategory(String itemCategory) {
-		this.itemCategory = itemCategory;
 	}
 
 	public ArrayList<String> getStatBlock() {
@@ -134,6 +125,14 @@ public abstract class Item {
 
 	public void setRequirements(String requirements) {
 		this.requirements = requirements;
+	}
+
+	public ArrayList<String> getCraftedMods() {
+		return craftedMods;
+	}
+
+	public void setCraftedMods(ArrayList<String> craftedMods) {
+		this.craftedMods = craftedMods;
 	}
 	
 }

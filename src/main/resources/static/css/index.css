@@ -1,0 +1,20 @@
+    #header {
+        font-family: "poeSmallCaps";
+    }
+    #get-started {
+        display: inline-block;
+        width: 150px;
+        position: fixed;
+        left: 100%;
+        margin-left: -180px;
+        top: 25px;
+    }
+    #sessid-input {
+        display: inline-block;
+        position: fixed;
+        left: 65%;
+        margin-right: 10px;
+        margin-top:10px;
+        top: 80px;
+        z-index: 1000;
+    }

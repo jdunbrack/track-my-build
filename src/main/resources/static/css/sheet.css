@@ -1,0 +1,200 @@
+    #portrait {
+        display: inline-block;
+        position: sticky;
+        top: 10px;
+        left: 10px;
+        background-image: url("../img/portrait/portrait-banner.png");
+        background-size: cover;
+        height: 81px;
+        width: 294px;
+        z-index: 1000;
+    }
+    #exile-name, #exile-class {
+        font-family: "poeSmallCaps";
+        display: inline-block;
+        position: absolute;
+        margin-left: 10px;
+    }
+    #exile-name {
+        top: 8px;
+    }
+    #exile-class {
+        top: 45px;
+    }
+    a.small {
+        position: fixed;
+        top: 90px;
+        left: 10px;
+    }
+    #passive-tree {
+        position: fixed;
+        top: 140px;
+        left: 10px;
+    }
+    #body {
+        border-left: 2px solid #A38D6D;
+    }
+    .sub-head {
+        font-size: 1.1rem;
+    }
+    .pane-toggle {
+        display: inline-block;
+        font-size: 1.2rem;
+        text-decoration: none;
+    }
+    .equip-div {
+        padding: 2rem;
+        margin-bottom: 2rem;
+        background-color: #343a40;
+        border: 1px solid #6c757d;
+    }
+    .inventory-pane {
+        height: 424px;
+        width: 523px;
+        background-image: url("../img/bg/inventory.png");
+        background-color: #999;
+        background-size: cover;
+        position: relative;
+        left: 50%;
+        margin-left: -260px;
+        top: 0px;
+        z-index: 100;
+    }
+    .swap {
+        transform: scale(0.75);
+        z-index: 200;
+    }
+    .swap.gear {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        z-index: 300;
+    }
+    .gear {
+        position: absolute;
+        transform: scale(0.9);
+    }
+    .popover {
+        text-align: center;
+        background-color: rgba(0,0,0,.85);
+        max-width: none;
+        padding: 0 0 10px 0;
+    }
+    .popover-body {
+        font-family: 'poeSmallCaps';
+        color: #7f7f7f;
+        margin: 0px;
+    }
+    .item-header1 {
+        margin: 0;
+        float: left;
+    }
+    .item-header2 {
+        margin: 0;
+        float: right;
+    }
+    .normal-header {
+        background-image: url('../img/bg/bg-normal-title.png');
+        height: 34px;
+    }
+    .magic-header {
+        background-image: url('../img/bg/bg-magic-title.png');
+        height: 34px; 
+    }
+    .rare-header {
+        background-image: url('../img/bg/bg-rare-title.png');
+        height: 54px;
+    }
+    .unique-header {
+        background-image: url('../img/bg/bg-unique-title.png');
+        height: 54px;
+    }
+    .normal {
+        display: inline-block;
+        line-height: 34px;
+        font-size: 1.1rem;
+    }
+    .magic {
+        display: inline-block;
+        line-height: 34px;
+        font-size: 1.1rem;
+        color: #8a50e2;
+    }
+    .rare {
+        display: inline-block;
+        font-size: 1.1rem;			
+        color: #f0ff71;
+    }
+    .unique {
+        display: inline-block;
+        font-size: 1.1rem;
+        color: #ae5b0b;
+    }
+    .break {
+        display: block;
+        margin: 0 auto;
+    }
+    .mods {
+        color: #8a50e2;
+    }
+    .crafted {
+        color: #8e9eab;
+    }
+    #BodyArmour {
+        left: 215px;
+        top: 115px;
+    }
+    #Weapon {
+        left: 28px;
+        top: 19px;
+    }
+    #Offhand {
+        left: 400px;
+        top: 19px;
+    }
+    #Ring {
+        left: 145px;
+        top: 162px;
+    }
+    #Ring2 {
+        left: 330px;
+        top: 162px;
+    }
+    #Belt {
+        left: 215px;
+        top: 270px;
+    }
+    #Gloves {
+        left: 97px;
+        top: 220px;
+    }
+    #Amulet {
+        left: 331px;
+        top: 103px;
+    }
+    #Boots {
+        left: 331px;
+        top: 220px;
+    }
+    #Helm {
+        left: 214px;
+        top: 8px;
+    }
+    #Flask0, #Flask1, #Flask2, #Flask3, #Flask4 {
+        top: 325px;
+    }
+    #Flask0 {
+        left: 148px;
+    }
+    #Flask1 {
+        left: 194px;
+    }
+    #Flask2 {
+        left: 240px;
+    }
+    #Flask3 {
+        left: 286px;
+    }
+    #Flask4 {
+        left: 332px;
+    }

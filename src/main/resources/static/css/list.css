@@ -1,0 +1,21 @@
+    .portrait {
+        position: relative;
+        left: 1px;
+        top: 1px;
+        background-image: url("../img/portrait/portrait-banner.png");
+        background-size: cover;
+        height: 81px;
+        width: 294px;
+    }
+    .exile-name, .exile-class {
+        font-family: "poeSmallCaps";
+        display: inline-block;
+        position: absolute;
+        margin-left: 10px;
+    }
+    .exile-name {
+        top: 8px;
+    }
+    .exile-class {
+        top: 45px;
+    }

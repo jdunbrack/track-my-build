@@ -1,6 +1,7 @@
 package build.trackmy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -9,18 +10,27 @@ import build.trackmy.models.Gear;
 import build.trackmy.models.Gem;
 
 public class ObjectMapperToMapTest {
+	public static ArrayList<ArrayList<String>> ascendencyDict;
+	
 	
 	public static void main(String[] args)  {
-		HashMap<Integer, ArrayList<String>> ascendencyDict = new HashMap<Integer, ArrayList<String>>();
+		ascendencyDict = new ArrayList<ArrayList<String>>();
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Scion", "Ascendant")));
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Marauder", "Juggernaut", "Berserker", "Chieftan")));
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Ranger", "Raider", "Deadeye", "Pathfinder")));
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Witch", "Occultist", "Elementalist", "Necromancer")));
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Duelist", "Slayer", "Gladiator", "Champion")));
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Templar", "Inquisitor", "Heirophant", "Guardian")));
+		ascendencyDict.add(new ArrayList<String>(Arrays.asList("Shadow", "Assassin", "Trickster", "Saboteur")));
 		
-		
+		String characterName = "NotSoSlowBurn";
 		
 		ObjectMapperToMap obj = new ObjectMapperToMap();
 		
 		LinkedHashMap<String,Object> json = null;
 		
 		try {
-			json = obj.readJsonToMap("https://www.pathofexile.com/character-window/get-items?character=NotSoSlowBurn");
+			json = obj.readJsonToMap(characterName, "59e216cf34df30cb36b9fa26fb6a3d16");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -30,22 +40,47 @@ public class ObjectMapperToMapTest {
 		
 		
 		Exile newExile = parseExile(characterInfo);
+
+		HashMap<String, Gear> items = new HashMap<String, Gear>();
+		for (LinkedHashMap<String, Object> item : itemList) {
+			if (item.get("inventoryId").toString().equals("MainInventory")) {
+				continue;
+			}
+			Gear thisItem = parseGear(item);
+			items.put(thisItem.getGearSlot(), thisItem);
+		}
+				
+		newExile.setItems(items); 
 		
-		System.out.println(newExile.getName());
-		System.out.println(newExile.getBaseClass());
-		System.out.println(newExile.getAscendency());
-		System.out.println(newExile.getLevel());
-		
-		
-//		ArrayList<Gear> items = new ArrayList<Gear>();
-//		
-//		for (LinkedHashMap<String, Object> item : itemList) {
-//			items.add(parseGear(item));
-//		}
-//		
-//		newExile.setItems(items); 
-		
-		
+		for (Gear item: newExile.getItems().values()) {
+			for (String line: item.getItemName()) {
+				System.out.println(line);
+			}
+			System.out.println("--------------------");
+			System.out.println("Item level: " + item.getItemLevel());
+			if (item.getStatBlock() != null) {
+				for (String line: item.getStatBlock()) {
+					System.out.println(line);
+				}
+			}
+			if (item.getRequirements() != null) {
+				System.out.println(item.getRequirements());
+			}
+			System.out.println("--------------------");
+			if (item.getImplicitMods() != null) {
+				for (String line: item.getImplicitMods()) {
+					System.out.println(line);
+				}
+				System.out.println("--------------------");
+			}
+
+			if (item.getExplicitMods() != null) {
+				for (String line: item.getExplicitMods()) {
+					System.out.println(line);
+				}
+			}
+			System.out.println();
+		}
 		
 	}
 	
@@ -55,51 +90,56 @@ public class ObjectMapperToMapTest {
 	
 	public static Gear parseGear(LinkedHashMap<String, Object> gearJson) {
 		Gear gear = new Gear();
+		ArrayList<String> tempList = new ArrayList<String>();
 		
+		// add item level and rarity;
 		gear.setImage((String) gearJson.get("icon"));
 		gear.setRarity((Integer) gearJson.get("frameType"));
 		
-		ArrayList<String> tempList = gear.getItemName();
+		
 		
 		// parse the header
-		tempList.add((String) gearJson.get("name"));
+		if (gearJson.get("name").toString().length() > 0) {
+			tempList.add((String) gearJson.get("name"));
+		}
 		tempList.add((String) gearJson.get("typeLine"));
-		gear.setItemName(tempList);
+		gear.setItemName((ArrayList<String>) tempList.clone());
 		tempList.clear();
-		
-		
+
 		// parse category
 		
-		// parse the statblock from ilvl through requirements
-		tempList.add("Item Level: " + (String) gearJson.get("ilvl"));
-		tempList.addAll(parseBlock((ArrayList<LinkedHashMap<String, Object>>) gearJson.get("properties")));
-		tempList.add("break");
+		// parse the statblock from ilvl (inclusive) through requirements (exclusive)
+		gear.setItemLevel(Integer.parseInt(gearJson.get("ilvl").toString()));
+		
+		if (gearJson.get("properties") != null) {
+			gear.setStatBlock(parseBlock((ArrayList<LinkedHashMap<String, Object>>) gearJson.get("properties")));
+		}
 		
 		// parse requirements
-		tempList.add(parseReqs((ArrayList<LinkedHashMap<String, Object>>) gearJson.get("requirements")));
-
-		for (String line: tempList) {
-			System.out.println(line);
+		if (gearJson.get("requirements") != null) {
+			gear.setRequirements(parseReqs((ArrayList<LinkedHashMap<String, Object>>) gearJson.get("requirements")));
 		}
 		
 		// parse implicit modifiers
-		
+		if (gearJson.get("implicitMods") != null) {
+			gear.setImplicitMods((ArrayList<String>) gearJson.get("implicitMods"));
+		}
 		
 		// parse explicit modifiers
 		
+		if (gearJson.get("explicitMods") != null) {
+			gear.setExplicitMods((ArrayList<String>) gearJson.get("explicitMods"));
+		}
 		
 		// parse sockets
 		
 		
 		// parse gems in sockets
-		
-		
-		tempList.clear();
+		System.out.println(gearJson.get("inventoryId"));
+		gear.setGearSlot(gearJson.get("iventoryId").toString());
 
 		
-		
-		
-		return new Gear();
+		return gear;
 	}
 	
 	public static ArrayList<String> parseBlock(ArrayList<LinkedHashMap<String, Object>> propertyList) {
@@ -107,14 +147,27 @@ public class ObjectMapperToMapTest {
 		ArrayList<String> statBlock = new ArrayList<String>();
 		
 		for (int i = 0; i < propertyList.size(); i++) {
+
 			LinkedHashMap<String,Object> propertyMap = (LinkedHashMap<String, Object>) propertyList.get(i);
 			ArrayList<Object> tempList = (ArrayList<Object>) propertyMap.get("values");
 			if (tempList.size() < 1) {
 				continue;
 			}
-			tempList = (ArrayList<Object>) tempList.get(0);
-			line = (String) propertyMap.get("name") + ": ";
-			line += (String) tempList.get(0);
+			
+			if (propertyMap.get("name").toString().contains("%0")) {
+				line = propertyMap.get("name").toString();
+				
+				line = line.replace("%0", ((ArrayList<Object>) tempList.get(0)).get(0).toString());		
+				if (line.contains("%1")) {
+					line = line.replace("%1", ((ArrayList<Object>) tempList.get(1)).get(0).toString());
+				}
+				statBlock.add(line);
+				continue;
+			} else {
+				tempList = (ArrayList<Object>) tempList.get(0);
+				line = (String) propertyMap.get("name") + ": ";
+				line += (String) tempList.get(0);
+			}
 			statBlock.add(line);
 		}
 		
@@ -131,7 +184,7 @@ public class ObjectMapperToMapTest {
 				continue;
 			}
 			tempList = (ArrayList<Object>) tempList.get(0);
-			reqsLine = (String) reqsMap.get("name") + " " + (String) tempList.get(0);
+			reqsLine += (String) reqsMap.get("name") + " " + (String) tempList.get(0);
 			if (i != reqsList.size() - 1) {
 				reqsLine += ", ";
 			}
@@ -144,8 +197,13 @@ public class ObjectMapperToMapTest {
 	public static Exile parseExile(LinkedHashMap<String, Object> json) {
 		Exile thisExile = new Exile();
 		thisExile.setName(json.get("name").toString());
-		thisExile.setBaseClass(Integer.parseInt(json.get("classId").toString()));
-		thisExile.setAscendency(Integer.parseInt(json.get("ascendancyClass").toString()));
+		
+		thisExile.setBaseClass(ascendencyDict.get(Integer.parseInt(json.get("classId").toString())).get(0));
+		if (Integer.parseInt(json.get("ascendancyClass").toString()) == 0) {
+			thisExile.setAscendancy("None");
+		} else { 
+			thisExile.setAscendancy(ascendencyDict.get(Integer.parseInt(json.get("classId").toString())).get(Integer.parseInt(json.get("ascendancyClass").toString())));
+		}
 		thisExile.setLevel(Integer.parseInt(json.get("level").toString()));
 		return thisExile;
 	}

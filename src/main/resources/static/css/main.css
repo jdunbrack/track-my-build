@@ -1,0 +1,20 @@
+    @font-face {
+        font-family: poeRegular;
+        src: url("../font/fontin-regular-webfont.ttf");
+    }
+    @font-face {
+        font-family: poeSmallCaps;
+        src: url("../font/fontin-smallcaps-webfont.ttf");
+    }
+    @font-face {
+        font-family: poeBold;
+        src: url("../font/fontin-bold-webfont.ttf");
+    }
+    body {
+        background-image: url("../img/bg/bg-brushed.png");
+        font-family: 'poeRegular';
+        color: #A38D6D;
+    }
+
+
+
